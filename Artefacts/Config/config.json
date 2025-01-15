@@ -1,0 +1,279 @@
+{
+   "visuals_segment_clusters": [
+    {
+       "visualsegment": "Old_Woman_Individual",
+       "subject": "a vibrant Indonesian woman",
+       "age": "age 40-50 years old",
+       "clothing": "wearing a traditional Balinese dress",
+       "theme" : "enjoying movie on her phone screen wearing red headphones",
+       "background": "white background",
+       "photography": "Studio portrait, professional lighting, DSLR camera shot"
+    },
+    {
+       "visualsegment": "Young_Digital_Duo",
+       "subject": "2 Indonesian friends one man and woman",
+       "age": "age 20-30 years old",
+       "clothing": "dressed in modern, colorful outfits featuring red, yellow, and green hues",
+       "theme" : "standing around in a lively setting seeing a mobile with one of them playfully dancing",
+       "background": "white background",
+       "photography": "Studio portrait, professional lighting, DSLR camera shot"
+    },
+    {
+       "visualsegment": "Young_Gamers_Group",      
+       "subject": "3-4 Indonesian friends men and women",
+       "age": "age 20-25 years old",
+       "clothing": "dressed in bold, colorful outfits featuring red, yellow, and green hues and matching footwear",
+       "theme" : "radiating vibrant energy, immersed in a lively gaming session holding wireless gaming controllers",
+       "background": "white background",
+       "photography": "Studio portrait, professional lighting, DSLR camera shot"
+    },
+    {
+       "visualsegment": "Young_Hijab_Group",      
+       "subject": "2-3 beautiful Indonesian women",
+       "age": "age 20-35 years old",
+       "clothing": "dressed in vibrant traditional Hijab attire, adorned with rich hues of red, yellow, and green, their colorful footwear adding a playful touch",
+       "theme" : "radiating joy as they share a laugh while looking at a phone",
+       "background": "white background",
+       "photography": "Studio portrait, professional lighting, DSLR camera shot"     
+     }
+   ],
+   "banner_template": [
+      {
+         "bannertemplate":"Template1",
+         "background_size":{
+            "width":1920,
+            "height":1080
+            },         
+         "text_tagline_position":{
+         "height":75,
+         "x":97,
+         "y":850,
+         "width":985
+         },
+         "text_action_position":{
+         "y":974,
+         "width":266,
+         "height":64,
+         "x":132
+         },
+         "text_highlight1_position":{
+         "y":405,
+         "height":127,
+         "x":706,
+         "width":235
+         },
+         "graphic2_position":{
+         "x":947,
+         "width":138,
+         "height":285,
+         "y":408
+         },
+         "actor_position":{
+         "y":49,
+         "height":1031,
+         "width":775,
+         "x":1145
+         },
+         "text_header1_position":{
+         "height":89,
+         "x":99,
+         "width":996,
+         "y":174
+         },
+         "text_details_position":{
+         "y":408,
+         "width":586,
+         "height":285,
+         "x":97
+         },
+         "graphic1_position":{
+         "width":589,
+         "height":137,
+         "x":97,
+         "y":703
+         },
+         "graphic_highlight2_position":{
+         "x":705,
+         "height":140,
+         "y":551,
+         "width":239
+         },
+         "text_highlight3_position":{
+         "y":706,
+         "x":706,
+         "width":374,
+         "height":134
+         },
+         "text_header2_position":{
+         "width":995,
+         "height":88,
+         "y":280,
+         "x":100
+         },
+         "logo_position":{
+         "height":90,
+         "y":52,
+         "x":104,
+         "width":142
+         }
+     },
+     {
+      "bannertemplate":"Template2",
+      "background_size":{
+         "width":1920,
+         "height":1080
+         },      
+      "text_tagline_position":{
+      "height":75,
+      "x":97,
+      "y":850,
+      "width":985
+      },
+      "text_action_position":{
+      "y":974,
+      "width":266,
+      "height":64,
+      "x":132
+      },
+      "text_highlight1_position":{
+      "y":405,
+      "height":127,
+      "x":706,
+      "width":235
+      },
+      "graphic2_position":{
+      "x":947,
+      "width":138,
+      "height":285,
+      "y":408
+      },
+      "actor_position":{
+      "y":49,
+      "height":1031,
+      "width":775,
+      "x":1145
+      },
+      "text_header1_position":{
+      "height":89,
+      "x":99,
+      "width":996,
+      "y":174
+      },
+      "text_details_position":{
+      "y":408,
+      "width":586,
+      "height":285,
+      "x":97
+      },
+      "graphic1_position":{
+      "width":589,
+      "height":137,
+      "x":97,
+      "y":703
+      },
+      "graphic_highlight2_position":{
+      "x":705,
+      "height":140,
+      "y":551,
+      "width":239
+      },
+      "text_highlight3_position":{
+      "y":706,
+      "x":706,
+      "width":374,
+      "height":134
+      },
+      "text_header2_position":{
+      "width":995,
+      "height":88,
+      "y":280,
+      "x":100
+      },
+      "logo_position":{
+      "height":90,
+      "y":52,
+      "x":104,
+      "width":142
+      }
+   },
+   {
+      "bannertemplate":"Template3",
+      "background_size":{
+         "width":1920,
+         "height":1080
+      },   
+      "text_tagline_position":{
+         "width":981,
+         "height":62,
+         "y":858,
+         "x":801
+      },
+      "text_action_position":{
+         "width":276,
+         "y":977,
+         "height":62,
+         "x":1478
+      },
+      "actor_position":{
+         "height":981,
+         "y":50,
+         "width":704,
+         "x":3
+      },
+      "graphic2_position":{
+         "y":404,
+         "width":136,
+         "x":1652,
+         "height":293
+      },
+      "graphic1_position":{
+         "y":699,
+         "height":140,
+         "x":800,
+         "width":581
+      },
+      "logo_position":{
+         "y":50,
+         "x":1651,
+         "width":150,
+         "height":99
+      },
+      "text_highlight3_position":{
+         "y":705,
+         "x":1396,
+         "width":386,
+         "height":137
+      },
+      "graphic_highlight2_position":{
+         "width":252,
+         "y":555,
+         "height":139,
+         "x":1394
+      },
+      "text_highlight1_position":{
+         "x":1394,
+         "height":143,
+         "y":404,
+         "width":252
+      },
+      "text_header1_position":{
+         "width":994,
+         "y":176,
+         "x":800,
+         "height":100
+      },
+      "text_details_position":{
+         "x":799,
+         "height":279,
+         "y":407,
+         "width":581
+      },
+      "text_header2_position":{
+         "width":995,
+         "y":289,
+         "x":799,
+         "height":81
+      }
+   }
+   ]      
+ }
