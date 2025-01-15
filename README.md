@@ -35,8 +35,8 @@ b.	this format - ProjectNumber_telecom_demo_artefacts_bannergen_runtime
 c.	In the above example this is - 554686566379_telecom_demo_artefacts_bannergen_input
 
 6.	Down the entire “Artefacts” and 
-a.	upload them into the “ bucket
-b.	Take note to upload the entire “Artefacts” folder as shown below
+a.	upload them into the bucket "ProjectNumber_telecom_demo_artefacts_bannergen_input"
+b.	Take note to upload the entire "Artefacts" folder as shown below
 
 7.	Create a new Firestore instance “banner-gen-app” in Native mode with Database ID “banner-gen-app”
 
@@ -82,22 +82,12 @@ Dynamic backgrounds: Visually appealing scenes that resonate with customer inter
 
 Setup Instructions
 
-1. Create two GCS bucket following
-  this format - “<Project Number>_telecom_demo_artefacts_bannergen_input
-  this format - “<Project Number>_telecom_demo_artefacts_bannergen_runtime
-  In the above example this is - 554686566379_telecom_demo_artefacts_bannergen_input
-
-  Down the entire “Artefacts” and
-  upload them into the “ bucket
-  Take note to upload the entire “Artefacts” folder as shown below
-
-2. Create a new Firestore instance “banner-gen-app” in Native mode with Database ID “banner-gen-app”
-
+1. Complete steps above for setup
+2. Ensure the "Artefacts" to bootstrap are copied into the GCS Bucket
 3. If you need to update new banner templates, or logos etc, update into the bucket directory "*telecom_demo_artefacts_bannergen_input - /Logo" or /Background or /Actors (to bring your own talent images)"
 4. Please ensure there is nothing uploaded in "_telecom_demo_artefacts_bannergen_input/Background_Processed" since this will automatically be done in notebook code
 5. If you add new assets into "_telecom_demo_artefacts_bannergen_input" in "Actors" / "Background", "Graphics", "Logo", ensure that you rerun the colab from Section - Demo Configuration & Initialization
 6. The contents of "_telecom_demo_artefacts_bannergen_input/Config" are for bootstrapping only and subsequently are updated into the firebase DB
-
 7. Note that all output images generated are temporarily retained in colab local dir and will NOT be saved on colab termination. If you want to reuse them, download them from the folder /content/demo/output for future reference.
 
 Execution Instructions
