@@ -30,8 +30,8 @@ PROJECT_LOCATION = "us-central1" # @param {type:"string"}
 4.	Identify your Project Number. Copy the Project Number, mine is 554686566379
 
 5.	Create two GCS bucket following 
-a.	this format - <ProjectNumber>_telecom_demo_artefacts_bannergen_input
-b.	this format - <ProjectNumber>_telecom_demo_artefacts_bannergen_runtime
+a.	this format - ProjectNumber_telecom_demo_artefacts_bannergen_input
+b.	this format - ProjectNumber_telecom_demo_artefacts_bannergen_runtime
 c.	In the above example this is - 554686566379_telecom_demo_artefacts_bannergen_input
 
 6.	Down the entire “Artefacts” and 
