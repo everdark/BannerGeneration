@@ -24,8 +24,8 @@ Nature of Demo: Vertex AI Enterprise Colab
 
 3.	Edit in your copy to configure your project details for the following.
 
-PROJECT_ID = "genai-e2e-demos" # @param {type:"string"}
-PROJECT_LOCATION = "us-central1" # @param {type:"string"}
+PROJECT_ID = "your_project_id" # @param {type:"string"}
+PROJECT_LOCATION = "your_project_location" # @param {type:"string"}
 
 4.	Identify your Project Number. Copy the Project Number, mine is 554686566379
 
