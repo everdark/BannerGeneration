@@ -27,10 +27,7 @@ Nature of Demo: Vertex AI Enterprise Colab
 PROJECT_ID = "genai-e2e-demos" # @param {type:"string"}
 PROJECT_LOCATION = "us-central1" # @param {type:"string"}
 
-4.	Identify your Project Number. You will typically find it in the link
-
-a.	https://console.cloud.google.com/welcome?hl=en&project=<your project ID>
-b.	Copy the Project Number, mine is 554686566379
+4.	Identify your Project Number. Copy the Project Number, mine is 554686566379
 
 5.	Create two GCS bucket following 
 a.	this format - “<Project Number>_telecom_demo_artefacts_bannergen_input
