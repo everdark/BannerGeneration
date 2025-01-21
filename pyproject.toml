@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "banner-genai"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+google-cloud-aiplatform = "^1.77.0"
+google-cloud-firestore = "^2.20.0"
+google-cloud-resource-manager = "^1.14.0"
+google-cloud-storage = "^2.19.0"
+gradio = "^5.12.0"
+llvmlite = ">=0.37"
+matplotlib = "^3.10.0"
+numba = "0.60.0"
+numpy = "2.0.2"
+onnxruntime = "^1.20.1"
+pandas = "^2.2.3"
+pydantic = "^2.10.5"
+pydantic-settings = "^2.7.1"
+gradio-image-annotation = "^0.2.5"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.9.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
