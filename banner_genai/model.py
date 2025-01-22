@@ -4,6 +4,8 @@ from enum import Enum
 
 from pydantic import BaseModel
 
+from config import settings
+
 
 # FIXME: How to make sure the system fonts are available?
 #        To install liberation fonts on macos:
@@ -19,12 +21,12 @@ class Font(str, Enum):
 class SegmentProfile(BaseModel):
     """Data model to describe a visual segment with various attributes."""
 
-    age: str
-    background: str = "White background"
-    clothing: str
-    photography: str = "Studio portrait, professional lighting, DSLR camera shot, 4K"
-    subject: str
-    theme: str
+    age: str | None = None
+    background: str = settings.default_background
+    clothing: str | None = None
+    photography: str = settings.default_photography
+    subject: str | None = None
+    theme: str | None = None
     visualsegment: str
 
     def prompt(self) -> str:

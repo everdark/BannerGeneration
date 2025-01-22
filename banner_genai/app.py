@@ -1,6 +1,6 @@
 import gradio as gr
 
-# from utils.firestore import init_document_store
+import constants as C
 from blocks import (
     ui_about_tab,
     ui_demo_tab_assetlibrary,
@@ -9,20 +9,26 @@ from blocks import (
     ui_demo_bannertemplateconfig_tab,
     ui_demo_tab_bannergen,
 )
-# TODO: Init firestore documents from local artefacts.
-# config_file_path = "./Artefacts/Config/config.json"
-# init_document_store(config_file_path)
+from config import settings
+from utils.firestore import cleanup_document_store, init_document_store
+
+if settings.is_init_backend:
+    # This will re-create the initial documents saved in Firestore.
+    cleanup_document_store()
+    init_document_store()
 
 tabs = [
-    (ui_about_tab, "About"),
-    (ui_demo_tab_assetlibrary, "Demo Asset Library"),
-    (ui_demo_tab_assetcreation, "Demo Asset Creation"),
-    (ui_demo_tab_assetpreprocess, "Demo Asset Preprocessing"),
-    (ui_demo_bannertemplateconfig_tab, "Demo Banner Template"),
-    (ui_demo_tab_bannergen, "Demo Banner Generation"),
+    (ui_about_tab, C.BlockName.ABOUT),
+    (ui_demo_tab_assetlibrary, C.BlockName.IMAGE),
+    (ui_demo_tab_assetcreation, C.BlockName.CREATE),
+    (ui_demo_tab_assetpreprocess, C.BlockName.PREPROCESS),
+    (ui_demo_bannertemplateconfig_tab, C.BlockName.TEMPLATE),
+    (ui_demo_tab_bannergen, C.BlockName.BANNER),
 ]
-interfaces, tab_names = zip(*tabs)
-demo = gr.TabbedInterface(interface_list=interfaces, tab_names=tab_names)
+blocks, tab_names = zip(*tabs)
 
 if __name__ == "__main__":
+    demo = gr.TabbedInterface(
+        interface_list=blocks, tab_names=tab_names, theme=gr.themes.Default()
+    )
     demo.launch(debug=True)

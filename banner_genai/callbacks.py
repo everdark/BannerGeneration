@@ -10,12 +10,73 @@ from PIL import Image, ImageDraw, ImageFont
 
 from config import settings
 from database import db
+from model import SegmentProfile
 from utils.firestore import (
-    get_template_configuration,
-    get_bannertemplate_config_by_name,
     add_or_update_bannertemplate,
+    add_or_update_visual_segment,
+    get_bannertemplate_config_by_name,
+    get_template_configuration,
+    get_visual_segment_config_by_name,
+    fetch_visual_segment_names,
 )
 from utils.io import find_files_with_prefix
+
+
+def update_segment_config(name: str):
+    """Updates frontend inputs for a visual segment.
+
+    Args:
+        name: Name of a visual segment.
+
+    Returns:
+       Values of all segment attributes and the selected name itself for UI updates.
+    """
+    global db
+
+    config = get_visual_segment_config_by_name(db, name)
+    profile = SegmentProfile(**config)
+
+    return tuple(profile.model_dump().values())
+
+
+def create_new_segment(
+    age: str,
+    background: str,
+    clothing: str,
+    photography: str,
+    subject: str,
+    theme: str,
+    name: str,
+) -> gr.Dropdown:
+    """Creates a new visual segment configuration saving to Firestore.
+
+    Returns:
+        Updated visual segment dropdown.
+    """
+    global db
+
+    if (not name) or name == "":
+        raise gr.Error(f"Visual segment is empty!", duration=3)
+
+    existing_segments = fetch_visual_segment_names(db)
+    if name in existing_segments:
+        raise gr.Error(f"Visual segment '{name}' already exists!", duration=3)
+
+    new_profile = SegmentProfile(
+        age=age,
+        background=background,
+        clothing=clothing,
+        photography=photography,
+        subject=subject,
+        theme=theme,
+        visualsegment=name,
+    )
+    add_or_update_visual_segment(db, new_profile.model_dump())
+    gr.Info(f"New segment '{name}' saved!", duration=5)
+
+    updated_segments = fetch_visual_segment_names(db)
+
+    return gr.Dropdown(choices=updated_segments)
 
 
 def create_bounding_box_annotator(image_data: list[dict], key: str) -> image_annotator:
@@ -171,9 +232,18 @@ def _get_font_size(textarea, text, font_name, pixel_gap=2):
     return wrapped_lines, point_size
 
 
-def _place_singleline_text_overlay_on_background(overlay_image_path, text, initial_font_size, overlay_config, font_name, text_color, alignment, margin=10):
-    x, y = overlay_config['x'], overlay_config['y']
-    width, height = overlay_config['width'], overlay_config['height']
+def _place_singleline_text_overlay_on_background(
+    overlay_image_path,
+    text,
+    initial_font_size,
+    overlay_config,
+    font_name,
+    text_color,
+    alignment,
+    margin=10,
+):
+    x, y = overlay_config["x"], overlay_config["y"]
+    width, height = overlay_config["width"], overlay_config["height"]
 
     with Image.open(overlay_image_path) as img:
         draw = ImageDraw.Draw(img)
@@ -197,14 +267,14 @@ def _place_singleline_text_overlay_on_background(overlay_image_path, text, initi
         print(f"Final text {text} with font size {font_size}")
 
         # Calculate text position and use Pillow's built-in alignment
-        if alignment == 'center':
-            anchor = 'mm'  # middle-middle
+        if alignment == "center":
+            anchor = "mm"  # middle-middle
             text_x = x + width // 2
-        elif alignment == 'right':
-            anchor = 'rm'  # right-middle
+        elif alignment == "right":
+            anchor = "rm"  # right-middle
             text_x = x + width - margin
         else:  # left alignment
-            anchor = 'lm'  # left-middle
+            anchor = "lm"  # left-middle
             text_x = x + margin
 
         # Calculate vertical position (center of the height)
@@ -472,7 +542,9 @@ def generate_banner(
 
     LOCAL_INPUT_DIR_GRAPHICS = os.path.join(settings.local_artefacts_dir, "Graphics")
     LOCAL_INPUT_DIR_LOGO = os.path.join(settings.local_artefacts_dir, "Logo")
-    LOCAL_OUTPUT_DIR_ACTOR = os.path.join(settings.local_artefacts_dir, "Actors_Processed")
+    LOCAL_OUTPUT_DIR_ACTOR = os.path.join(
+        settings.local_artefacts_dir, "Actors_Processed"
+    )
     LOCAL_INPUT_DIR_BG = os.path.join(settings.local_artefacts_dir, "Background")
     LOCAL_OUTPUT_DIR_BANNER = os.path.join(
         settings.local_artefacts_dir, "Banner_Generated"

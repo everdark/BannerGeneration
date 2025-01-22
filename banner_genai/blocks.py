@@ -5,15 +5,19 @@ import os
 import gradio as gr
 from gradio_image_annotation import image_annotator
 
+import constants as C
+from config import settings
 from callbacks import (
     create_bounding_box_annotator,
-    save_template_configuration,
+    create_new_segment,
     generate_banner,
+    update_segment_config,
+    save_template_configuration,
 )
+from database import db
 from utils.firestore import (
-    get_visual_segments_list,
-    get_visual_segments_config,
     get_bannertemplate_list,
+    fetch_visual_segment_names,
 )
 from utils.gradio import (
     display_image,
@@ -24,11 +28,9 @@ from utils.gradio import (
     select_folder,
 )
 from utils.io import create_file_map
-from config import settings
-from database import db
+
 
 gallery_dirname_list = []  # FIXME: Use session state instead.
-# db = firestore.Client(project=settings.gcp_project, database=settings.firestore_id)
 
 # FIXME: Get rid of these constants.
 default_model = settings.image_model
@@ -38,88 +40,12 @@ default_count = settings.n_image_generated
 default_aspectratio = "4:3"
 
 
-def load_config(selected_value: str):
-    # NOTE: The db connection cannot be serialized as a session state.
-    #       This makes moving the method to a separate module challenging without
-    #       re-init the connection.
-    if not selected_value:
-        gr.Warning("Please select a visual segment from the dropdown.", duration=5)
-        return (
-            None,
-            None,
-            None,
-            None,
-            settings.default_background,
-            settings.default_photography,
-            settings.n_image_generated,
-            settings.default_aspectratio,
-            settings.image_model,
-            None,
-        )
-    config = get_visual_segments_config(db, selected_value)
-
-    return (
-        config.get("subject", ""),
-        config.get("age", ""),
-        config.get("clothing", ""),
-        config.get("theme", ""),
-        config.get("background", ""),
-        config.get("photography", ""),
-        settings.n_image_generated,
-        settings.default_aspectratio,
-        settings.image_model,
-        selected_value,
-    )
-
-
-def create_new_segment(new_segment_name):
-    # FIXME: The new segment does not save to firestore.
-
-    if not new_segment_name:
-        raise gr.Error(f"Visual segment is empty!", duration=3)
-
-    # Validation: Check if the segment name already exists
-    if new_segment_name in get_visual_segments_list(db):
-        gr.Warning(
-            f"Visual segment '{new_segment_name}' already exists!", duration=5
-        )  # Throw warning
-        return (
-            None,
-            None,
-            None,
-            None,
-            default_background,
-            default_photography,
-            default_count,
-            default_aspectratio,
-            default_model,
-            new_segment_name,
-        )
-
-    return (
-        None,
-        None,
-        None,
-        None,
-        default_background,
-        default_photography,
-        default_count,
-        default_aspectratio,
-        default_model,
-        new_segment_name,
-    )
-
-
 with gr.Blocks() as ui_about_tab:
-    gr.Markdown("### About this Demo")
-    output_desc = gr.Text(
-        label="Demo Description",
-        value="This demo demonstrates an end to end pipeline for dynamic banner generation for CVM targeting using Imagen3, Gemini and opensource python libraries like rembg",
-    )
-
-    gr.Markdown("### Execute this part of the demo following below instructions -")
     gr.Markdown("""
-    In Demo,
+    ### About this Demo
+    This demo demonstrates an end to end pipeline for dynamic banner generation for CVM targeting using Imagen3, Gemini and opensource Python libraries like `rembg` (which leverages DNN models for object detection).
+
+    ### Instructions
     Step 1 - Use the "Demo Asset Library" to walk the customer through the building blocks for a dynamic banner generation - a library of elements for Actors / Background / Logos / Graphics / Text
     \n
     Step 2 - Use the "Demo Asset Creation" section to demonstrate the creation of a new visual segments (tied to customer targeting needs), generation of Actors using Imagen3
@@ -176,20 +102,20 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
         gr.Markdown("# Create New Marketing Assets With Imagen3")
 
     with gr.Row():
-        with gr.Column(scale=1, variant="panel"):
-            # Dropdown with existing visual segments
+        with gr.Column(variant="panel"):
             visual_segment_dropdown = gr.Dropdown(
-                choices=get_visual_segments_list(db), label="Select Visual Segment"
+                choices=fetch_visual_segment_names(db),
+                label="Select Visual Segment",
+                elem_id=C.ElementID.SEGMENT_DROPDOWN,
             )
-            load_button = gr.Button("Load Visual Config")
+            load_segment_config_button = gr.Button("Load Visual Config")
 
-        with gr.Column(scale=3, variant="panel"):
+        with gr.Column(variant="panel"):
             new_segment_input = gr.Textbox(label="New Visual Segment Name")
-            create_button = gr.Button("Define Visual Config")
+            create_segment_button = gr.Button("Define Visual Config")
 
     with gr.Column(variant="panel"):
-        # Input boxes for visual segment configuration
-        with gr.Row():
+        with gr.Row(elem_id=C.ElementID.SEGMENT_INPUTS):
             subject_input = gr.Textbox(
                 label="Subject",
                 placeholder="Describe the subject. E.g. a vibrant Indonesian woman",
@@ -202,7 +128,6 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
                 lines=2,
                 interactive=True,
             )
-        with gr.Row():
             clothing_input = gr.Textbox(
                 label="Clothing",
                 placeholder="Clothing of the subject. E.g. wearing a traditional Balinese dress",
@@ -215,9 +140,9 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
                 lines=4,
                 interactive=True,
             )
-        with gr.Row():
+        with gr.Row(elem_id=C.ElementID.SEGMENT_INPUTS_EXT):
             background_input = gr.Textbox(
-                label="Environment Settings",
+                label="Background Settings",
                 placeholder="White background",
                 interactive=True,
             )
@@ -256,25 +181,21 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
         with gr.Column(variant="panel"):
             approve_button = gr.Button("Save Images to Marketing Library")
 
-    # When load or select a segment...
     gr.on(
-        triggers=[load_button.click, visual_segment_dropdown.change],
-        fn=load_config,
+        triggers=[load_segment_config_button.click, visual_segment_dropdown.change],
+        fn=update_segment_config,
         inputs=visual_segment_dropdown,
+        # NOTE: The outputs shall follow alphabetic order from the SegmentProfile model.
         outputs=[
-            subject_input,
             age_input,
-            clothing_input,
-            theme_input,
             background_input,
+            clothing_input,
             photography_input,
-            count_input,
-            aspectratio_input,
-            model_input,
+            subject_input,
+            theme_input,
             selected_visual_segment,
         ],
     ).then(
-        # Show the generate button
         fn=lambda: [
             gr.update(visible=True),
             gr.update(visible=False),
@@ -287,23 +208,18 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
         ],
     )
 
-    # When create a new segment profile...
-    # FIXME: This button is currently doing nothing due to no save ops in create_new_segment.
-    create_button.click(
+    create_segment_button.click(
         create_new_segment,
-        inputs=new_segment_input,
-        outputs=[
-            subject_input,
+        inputs=[
             age_input,
-            clothing_input,
-            theme_input,
             background_input,
+            clothing_input,
             photography_input,
-            count_input,
-            aspectratio_input,
-            model_input,
-            selected_visual_segment,
+            subject_input,
+            theme_input,
+            new_segment_input,
         ],
+        outputs=visual_segment_dropdown,
     ).then(
         fn=lambda: [
             gr.update(visible=True),
@@ -370,7 +286,7 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
         ],
     ).then(
         fn=lambda: [
-            gr.update(choices=get_visual_segments_list(db)),
+            gr.update(choices=fetch_visual_segment_names(db)),
             gr.update(value=None),  # Reset the dropdown value
             gr.update(value=None),
             gr.update(value=None),
@@ -497,7 +413,7 @@ with gr.Blocks() as ui_demo_tab_bannergen:
     with gr.Row():
         with gr.Column(scale=1, variant="panel"):
             visual_segment_dropdown = gr.Dropdown(
-                choices=get_visual_segments_list(db),
+                choices=fetch_visual_segment_names(db),
                 label="Select Visual Segment",
                 multiselect=True,
             )
@@ -678,7 +594,7 @@ with gr.Blocks() as ui_demo_tab_bannergen:
         This function updates the choices of the visual_segment_dropdown.
         """
         return gr.Dropdown(
-            choices=get_visual_segments_list(db),
+            choices=fetch_visual_segment_names(db),
             label="Select Visual Segment",
             multiselect=True,
         )

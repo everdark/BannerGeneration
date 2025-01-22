@@ -1,48 +1,60 @@
 """Utilities to interact with Firestore."""
 
 import json
+import os
 
 from google.cloud import firestore
 
+import constants as C
 from config import settings
 
 
-def init_document_store(config_file_path: str):
+def init_document_store(config_file_path: str | None = None) -> None:
+    """Inits contents in Firestore as the backend document storage.
+
+    The initial contents include configurations for both visual segments and banner
+    template layouts.
+
+    Args:
+        config_file_path: Path to the configuration JSON file.
+    """
+    if config_file_path is None:
+        config_file_path = os.path.join(settings.local_artefacts_dir, "config.json")
+
     with open(config_file_path, "r") as f:
         config_data = json.load(f)
 
     db = firestore.Client(project=settings.gcp_project, database=settings.firestore_id)
 
-    banner_template = config_data.get("banner_template", [])
-    collection_ref = db.collection("banner_template")
+    banner_template = config_data.get(C.DocKey.TEMPLATE, [])
+    collection_ref = db.collection(C.DocKey.TEMPLATE)
     for banner in banner_template:
         doc_ref = collection_ref.document(banner["bannertemplate"])
         doc_ref.set(banner)
 
-    visual_segments = config_data.get("visuals_segment_clusters", [])
-    collection_ref = db.collection("visuals_segment_clusters")
+    visual_segments = config_data.get(C.DocKey.SEGMENT, [])
+    collection_ref = db.collection(C.DocKey.SEGMENT)
     for segment in visual_segments:
         doc_ref = collection_ref.document(segment["visualsegment"])
         doc_ref.set(segment)
 
 
-def cleanup_document_store():
+def cleanup_document_store() -> None:
+    """Removes all documents from the backend Firestore."""
     db = firestore.Client(project=settings.gcp_project, database=settings.firestore_id)
-    collection_visuals_segment_clusters = db.collection("visuals_segment_clusters")
-    if collection_visuals_segment_clusters.get():
-        docs = collection_visuals_segment_clusters.stream()
-        for doc in docs:
-            doc.reference.delete()
-
-    collection_banner_template = db.collection("banner_template")
-    if collection_banner_template.get():
-        docs = collection_banner_template.stream()
-        for doc in docs:
-            doc.reference.delete()
+    collections_to_nuke = [C.DocKey.SEGMENT, C.DocKey.TEMPLATE]
+    for collection in collections_to_nuke:
+        collection_ref = db.collection(collection)
+        if collection_ref.get():
+            docs = collection_ref.stream()
+            for doc in docs:
+                doc.reference.delete()
 
 
+# FIXME: Do we need this at all?
 def get_visual_segments_from_db(db: firestore.Client) -> list[dict]:
-    collection_ref = db.collection("visuals_segment_clusters")
+    # This essentially fetches all documents to memory.
+    collection_ref = db.collection(C.DocKey.SEGMENT)
     docs = collection_ref.stream()
     visual_segments = []
     for doc in docs:
@@ -51,30 +63,49 @@ def get_visual_segments_from_db(db: firestore.Client) -> list[dict]:
     return visual_segments
 
 
-def get_visual_segments_list(db: firestore.Client):
-    return [segment["visualsegment"] for segment in get_visual_segments_from_db(db)]
+def fetch_visual_segment_names(db: firestore.Client) -> list[str]:
+    """Fetches all segment names from Firestore.
+
+    Args:
+        db: Firestore connection client.
+
+    Returns:
+        Segment names.
+    """
+    collection_ref = db.collection(C.DocKey.SEGMENT)
+    return [doc.id for doc in collection_ref.stream()]
 
 
-def get_visual_segments_config(db: firestore.Client, visual_segment_name: str):
-    for segment in get_visual_segments_from_db(db):
-        if segment["visualsegment"] == visual_segment_name:
-            return segment
+def get_visual_segment_config_by_name(db: firestore.Client, name: str) -> dict:
+    """Fetches a single segment configuration given its name.
+
+    Args:
+        db: Firestore connection client.
+        name: Segment name.
+
+    Returns:
+        Segment attribute document.
+    """
+    collection_ref = db.collection(C.DocKey.SEGMENT)
+    query_ref = collection_ref.where(
+        filter=firestore.FieldFilter("visualsegment", "==", name)
+    )
+    docs = [d.to_dict() for d in query_ref.stream()]
+    return docs[0]  # return only the first match
 
 
 def add_or_update_visual_segment(db: firestore.Client, segment_data: dict):
-    visual_segment_key = segment_data["visualsegment"]
-    collection_visuals_segment_clusters = db.collection("visuals_segment_clusters")
-    doc_ref = collection_visuals_segment_clusters.document(visual_segment_key)
+    segment_name = segment_data["visualsegment"]
+    collection_ref = db.collection(C.DocKey.SEGMENT)
+    doc_ref = collection_ref.document(segment_name)
 
     if doc_ref.get().exists:
-        # Update the existing document
         doc_ref.update(segment_data)
-        print(f"Visual segment '{visual_segment_key}' updated successfully.")
+        print(f"Visual segment '{segment_name}' updated successfully.")
         return "updated"
     else:
-        # Create a new document
         doc_ref.set(segment_data)
-        print(f"Visual segment '{visual_segment_key}' created successfully.")
+        print(f"Visual segment '{segment_name}' created successfully.")
         return "created"
 
 
@@ -167,7 +198,7 @@ def get_template_configuration(db: firestore.Client, template_name: str):
 
 
 def add_or_update_bannertemplate(db: firestore.Client, template_data: dict) -> str:
-    collection_ref = db.collection("banner_template")
+    collection_ref = db.collection(C.DocKey.TEMPLATE)
     template_key = template_data["bannertemplate"]
     doc_ref = collection_ref.document(template_key)
 
