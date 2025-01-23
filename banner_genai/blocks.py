@@ -30,13 +30,6 @@ from utils.io import create_file_map
 
 gallery_dirname_list = []  # FIXME: Use session state instead.
 
-# FIXME: Get rid of these constants.
-default_model = settings.image_model
-default_background = "White background"
-default_photography = "Studio portrait, professional lighting, DSLR camera shot, 4K"
-default_count = settings.n_image_generated
-default_aspectratio = "4:3"
-
 
 with gr.Blocks() as ui_about_tab:
     gr.Markdown("""
@@ -94,6 +87,8 @@ with gr.Blocks() as ui_demo_tab_assetlibrary:
 
 
 with gr.Blocks() as ui_demo_tab_assetcreation:
+
+    # The state of selected segment. This is used when clicking the asset creation btn.
     selected_visual_segment = gr.State()
 
     with gr.Row(variant="panel"):
@@ -151,7 +146,7 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
             )
         with gr.Row():
             count_input = gr.Dropdown(
-                choices=[1, 2, 3], label="# Images", interactive=True
+                choices=[3, 2, 1], label="# Images", interactive=True
             )
             aspectratio_input = gr.Dropdown(
                 choices=["1:1", "3:4", "4:3", "16:9", "9:16"],
@@ -159,7 +154,7 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
                 interactive=True,
             )
             model_input = gr.Dropdown(
-                choices=["imagen-3.0-fast-generate-001", "imagen-3.0-generate-001"],
+                choices=[m.value for m in C.ImageModel],
                 label="Imagen Models",
                 interactive=True,
             )
@@ -217,7 +212,10 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
             theme_input,
             new_segment_input,
         ],
-        outputs=visual_segment_dropdown,
+        outputs=[
+            selected_visual_segment,
+            visual_segment_dropdown,
+        ],
     ).then(
         fn=lambda: [
             gr.update(visible=True),
@@ -231,7 +229,6 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
         ],
     )
 
-    # When click imagen button...
     generate_assets_button.click(
         generate_assets,
         inputs=[
@@ -290,11 +287,6 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
             gr.update(value=None),
             gr.update(value=None),
             gr.update(value=None),
-            gr.update(value=default_background),
-            gr.update(value=default_photography),
-            gr.update(value=default_count),
-            gr.update(value=default_aspectratio),
-            gr.update(value=default_model),
         ],
         outputs=[
             visual_segment_dropdown,
@@ -303,11 +295,6 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
             age_input,
             clothing_input,
             theme_input,
-            background_input,
-            photography_input,
-            count_input,
-            aspectratio_input,
-            model_input,
         ],
     )
 

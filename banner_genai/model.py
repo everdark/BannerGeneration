@@ -1,21 +1,8 @@
 """Data models."""
 
-from enum import Enum
-
 from pydantic import BaseModel
 
 from config import settings
-
-
-# FIXME: How to make sure the system fonts are available?
-#        To install liberation fonts on macos:
-#           brew install --cask font-liberation
-class Font(str, Enum):
-    sans_bold = "LiberationSans-Bold.ttf"
-    sans_regular = "LiberationSans-Regular.ttf"
-    sans_narrow_bold = "LiberationSansNarrow-Bold.ttf"
-    mono_italic = "LiberationMono-Italic"
-    mono_bold = "LiberationMono-Bold.ttf"
 
 
 class SegmentProfile(BaseModel):

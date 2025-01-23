@@ -8,6 +8,7 @@ import gradio as gr
 from gradio_image_annotation import image_annotator
 from PIL import Image, ImageDraw, ImageFont
 
+import constants as C
 from config import settings
 from database import db
 from model import SegmentProfile
@@ -47,11 +48,11 @@ def create_new_segment(
     subject: str,
     theme: str,
     name: str,
-) -> gr.Dropdown:
+) -> tuple[str, gr.Dropdown]:
     """Creates a new visual segment configuration saving to Firestore.
 
     Returns:
-        Updated visual segment dropdown.
+        Updated the selected segment state and the segment dropdown.
     """
     global db
 
@@ -76,7 +77,7 @@ def create_new_segment(
 
     updated_segments = fetch_visual_segment_names(db)
 
-    return gr.Dropdown(choices=updated_segments)
+    return name, gr.Dropdown(choices=updated_segments)
 
 
 def create_bounding_box_annotator(image_data: list[dict], key: str) -> image_annotator:
@@ -393,7 +394,7 @@ def _create_marketing_banner_baseline(
         text_color = (0, 0, 0)
         text_alignment = "left"
         text_margin = 25
-        font_name = "LiberationSans-Bold.ttf"
+        font_name = C.Font.sans_bold
         _place_multiline_text_overlay_on_background(
             output_path,
             text_header,
@@ -410,7 +411,7 @@ def _create_marketing_banner_baseline(
         text_color = (0, 0, 0)
         text_alignment = "left"
         text_margin = 25
-        font_name = "LiberationSans-Regular.ttf"
+        font_name = C.Font.sans_regular
         _place_multiline_text_overlay_on_background(
             output_path,
             text_header,
@@ -427,7 +428,7 @@ def _create_marketing_banner_baseline(
         text_color = (0, 0, 0)
         text_alignment = "left"
         text_margin = 25
-        font_name = "LiberationSans-Regular.ttf"
+        font_name = C.Font.sans_regular
         _place_multiline_text_overlay_on_background(
             output_path,
             text_header,
@@ -448,7 +449,7 @@ def _create_marketing_banner_baseline(
         text_alignment = "center"
         text_margin = 5
         # font_name = "LiberationSansNarrow-Bold.ttf"
-        font_name = "LiberationSans-Bold.ttf"
+        font_name = C.Font.sans_bold
         _place_singleline_text_overlay_on_background(
             output_path,
             text_header,
@@ -470,7 +471,7 @@ def _create_marketing_banner_baseline(
         text_alignment = "center"
         text_margin = 20
         # font_name = "LiberationSansNarrow-Bold.ttf"
-        font_name = "LiberationSans-Bold.ttf"
+        font_name = C.Font.sans_bold
         _place_singleline_text_overlay_on_background(
             output_path,
             text_header,
@@ -488,7 +489,7 @@ def _create_marketing_banner_baseline(
         text_color = (255, 0, 0)
         text_alignment = "center"
         text_margin = 25
-        font_name = "LiberationMono-Italic"
+        font_name = C.Font.mono_italic
         _place_singleline_text_overlay_on_background(
             output_path,
             text_header,
@@ -506,7 +507,7 @@ def _create_marketing_banner_baseline(
         text_color = (255, 255, 255)
         text_alignment = "center"
         text_margin = 25
-        font_name = "LiberationMono-Bold.ttf"
+        font_name = C.Font.mono_bold
         _place_singleline_text_overlay_on_background(
             output_path,
             text_header,

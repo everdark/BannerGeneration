@@ -1,6 +1,27 @@
 from enum import Enum
 
 
+# FIXME: Make sure the system fonts are available on deployed runtime.
+#        To install liberation fonts on macos:
+#           brew install --cask font-liberation
+class Font(str, Enum):
+    sans_bold = "LiberationSans-Bold.ttf"
+    sans_regular = "LiberationSans-Regular.ttf"
+    sans_narrow_bold = "LiberationSansNarrow-Bold.ttf"
+    mono_italic = "LiberationMono-Italic"
+    mono_bold = "LiberationMono-Bold.ttf"
+
+
+class ImageModel(str, Enum):
+    """Existing image model from Google Gemini.
+
+    https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/imagen-api
+    """
+
+    IMAGEN_3_FAST = "imagen-3.0-fast-generate-001"
+    IMAGEN_3 = "imagen-3.0-generate-001"
+
+
 class BlockName(str, Enum):
     """Gradio block (tab) name."""
 
@@ -13,7 +34,7 @@ class BlockName(str, Enum):
 
 
 class DocKey(str, Enum):
-    """Document keys for Firestore."""
+    """Document collection keys for Firestore."""
 
     TEMPLATE = "banner_template"
     SEGMENT = "visuals_segment_clusters"
