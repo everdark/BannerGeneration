@@ -35,15 +35,13 @@ with gr.Blocks() as ui_about_tab:
     This demo demonstrates an end to end pipeline for dynamic banner generation for CVM targeting using Imagen3, Gemini and opensource Python libraries like `rembg` (which leverages DNN models for object detection).
 
     ### Instructions
-    Step 1 - Use the "Demo Asset Library" to walk the customer through the building blocks for a dynamic banner generation - a library of elements for Actors / Background / Logos / Graphics / Text
+    Step 1 - Use the "Demo Asset Library" tab to navigate visual assets and perform background-removal
     \n
-    Step 2 - Use the "Demo Asset Creation" section to demonstrate the creation of a new visual segments (tied to customer targeting needs), generation of Actors using Imagen3
+    Step 2 - Use the "Demo Asset Creation" tab to demonstrate the creation of a new visual segments using text-to-image model
     \n
-    Step 3 - Use the "Demo Asset Preprocessing" section to demonstrate the concept of removal of background from elements like Actors assets to enable overlay on top of background template
+    Step 3 - Use the "Demo Banner Template" tab to illustrate the concept of banner templates and how this can be defined via a UX or even via tools like Figma
     \n
-    Step 4 - Use the "Demo Banner Template" section to illustrate the concept of banner templates and how this can be defined via a UX or even via tools like Figma
-    \n
-    Step 5 - Use the "Demo Banner Generation" section to illustrate the concept of dynamic banner generation for one or more templates for one or more visual segments
+    Step 4 - Use the "Demo Banner Generation" tab to illustrate the concept of dynamic banner generation for one or more templates for one or more visual segments
     """)
 
 
@@ -75,6 +73,11 @@ with gr.Blocks() as ui_demo_tab_assetlibrary:
         with gr.Row():
             displayed_image = gr.Image(label="Selected Image")
 
+    with gr.Column(variant="panel"):
+        preprocess_assets_button = gr.Button(
+            "Click to Preprocess Newly Created Visual Assets"
+        )
+
     # Event handler for folder selection
     file_explorer.change(
         select_folder,
@@ -84,6 +87,12 @@ with gr.Blocks() as ui_demo_tab_assetlibrary:
 
     # Event handler for thumbnail selection
     thumbnail_gallery.select(display_image, inputs=[], outputs=[displayed_image])
+
+    preprocess_assets_button.click(
+        preprocess_assets_in_library,
+        inputs=[],
+        outputs=[file_explorer, thumbnail_gallery, displayed_image],
+    )
 
 
 with gr.Blocks() as ui_demo_tab_assetcreation:
@@ -295,51 +304,6 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
             theme_input,
         ],
     )
-
-
-with gr.Blocks() as ui_demo_tab_assetpreprocess:
-    # FIXME: The block is almost the same as the asset library tab. Reuse the layout?
-    with gr.Column(variant="panel"):
-        gr.Markdown("# Marketing Assets Preprocessing")
-
-    with gr.Column(variant="panel"):
-        preprocess_assets_button = gr.Button(
-            "Click to Preprocess Newly Created Visual Assets"
-        )
-
-    with gr.Column(variant="panel"):
-        with gr.Row():
-            with gr.Column(scale=1):
-                file_explorer_pp = gr.FileExplorer(
-                    root_dir=settings.local_artefacts_dir,
-                    ignore_glob="*.json",
-                    label="Library Explorer",
-                )
-
-            with gr.Column(scale=3):
-                thumbnail_gallery_pp = gr.Gallery(
-                    label="Selected Image Gallery", columns=3, rows=None, height="auto"
-                )
-
-    with gr.Column(variant="panel"):
-        with gr.Row():
-            displayed_image_pp = gr.Image(label="Selected Image")
-
-    preprocess_assets_button.click(
-        preprocess_assets_in_library,
-        inputs=[],
-        outputs=[file_explorer_pp, thumbnail_gallery_pp, displayed_image_pp],
-    )
-
-    # Event handler for folder selection
-    file_explorer_pp.change(
-        select_folder,
-        inputs=[file_explorer_pp],
-        outputs=[thumbnail_gallery_pp, displayed_image_pp],
-    )
-
-    # Event handler for thumbnail selection
-    thumbnail_gallery_pp.select(display_image, inputs=[], outputs=[displayed_image_pp])
 
 
 with gr.Blocks() as ui_demo_bannertemplateconfig_tab:

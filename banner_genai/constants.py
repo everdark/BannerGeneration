@@ -28,7 +28,6 @@ class BlockName(str, Enum):
     ABOUT = "About"
     IMAGE = "Demo Asset Library"
     CREATE = "Demo Asset Creation"
-    PREPROCESS = "Demo Asset Preprocessing"
     TEMPLATE = "Demo Banner Template"
     BANNER = "Demo Banner Generation"
 
