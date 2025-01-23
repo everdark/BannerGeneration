@@ -2,6 +2,11 @@
 
 import os
 import shutil
+from pathlib import Path
+
+
+def makedir_if_not_exist(path: str) -> None:
+    Path(path).mkdir(parents=True, exist_ok=True)
 
 
 def list_files_in_folder(folder_path, folder_name=""):

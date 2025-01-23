@@ -13,8 +13,9 @@ class Settings(BaseSettings):
     firestore_id: str = "(default)"
 
     local_artefacts_dir: str = "./artefacts"
-    local_artefacts_processed_dir: str = "./artefacts/actor_processed"
     local_tmp_dir: str = "/tmp"
+    local_actor_dirname: str = "Actors"
+    local_actor_processed_dirname: str = "Actors_Processed"
 
     n_image_generated: int = 3
 

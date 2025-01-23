@@ -28,6 +28,7 @@ from vertexai.generative_models import (
 from vertexai.vision_models import GeneratedImage, ImageGenerationModel
 
 from config import settings
+from model import SegmentProfile
 
 
 def generate_imagen_outputs(
@@ -68,6 +69,32 @@ def invoke_gemini_multimodal_model_with_files(
 ):
     response = model.generate_content(contents)
     return response
+
+
+def rewrite_prompt(segment_profile: SegmentProfile) -> str:
+    prompt_user_input = segment_profile.prompt()
+    print(f"User Input : {prompt_user_input}")
+
+    # TODO: Move this out.
+    rewrite_prompt = f"""
+        Act as a prompt engineering expert to generate a high quality prompt for Imagen3 image generation strictly following the user input below.
+
+        Extract all key information and entities required for you to rewrite the prompt retaining exact original intent without hyperbole to feed it to an image generation model.
+        Retain all inputs related to subject including age, ethinicity, gender, clothing, theme, background, photography in your output prompt
+        The input will be based for a marketing campaign description for creating posters, banners, etc.
+        Strictly do not provide any input text in the output top prompts or high confidence prompt.
+        You are only to generate image and not text on image.
+        The output should be concise, explaining all entities of what is required in the image and how it has to be generated.
+
+        Check if your response is a SINGLE high quality prompt meeting the guidelines above, before responding.
+
+        USER INPUT -
+        {prompt_user_input}
+
+        OUTPUT -
+    """
+    prompt = invoke_gemini_for_text(rewrite_prompt)
+    return prompt
 
 
 def remove_background(

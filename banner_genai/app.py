@@ -1,5 +1,7 @@
 """Entrypoint of the Gradio app."""
 
+import os
+
 import gradio as gr
 
 import constants as C
@@ -13,6 +15,13 @@ from blocks import (
 )
 from config import settings
 from utils.firestore import cleanup_document_store, init_document_store
+from utils.io import makedir_if_not_exist
+
+for d in [
+    os.path.join(settings.local_artefacts_dir, settings.local_actor_dirname),
+    os.path.join(settings.local_artefacts_dir, settings.local_actor_processed_dirname),
+]:
+    makedir_if_not_exist(d)
 
 if settings.is_init_backend:
     cleanup_document_store()

@@ -9,8 +9,13 @@ import constants as C
 from callbacks import (
     create_bounding_box_annotator,
     create_new_segment,
+    display_image,
+    generate_assets,
     generate_banner,
+    move_images_to_library,
+    preprocess_assets_in_library,
     save_template_configuration,
+    select_folder,
     update_segment_config,
 )
 from config import settings
@@ -18,13 +23,6 @@ from database import db
 from utils.firestore import (
     fetch_visual_segment_names,
     get_bannertemplate_list,
-)
-from utils.gradio import (
-    display_image,
-    generate_assets,
-    move_images_to_library,
-    preprocess_assets_in_library,
-    select_folder,
 )
 from utils.io import create_file_map
 
@@ -50,20 +48,22 @@ with gr.Blocks() as ui_about_tab:
 
 
 with gr.Blocks() as ui_demo_tab_assetlibrary:
-    ROOT_FOLDER = settings.local_artefacts_dir
-
     with gr.Column(variant="panel"):
         gr.Markdown("# Marketing Assets Library")
 
     with gr.Column(variant="panel"):
         with gr.Row():
-            gr.Markdown(f"**Image Library:** loaded from {ROOT_FOLDER}")
+            gr.Markdown(
+                f"**Image Library:** loaded from {settings.local_artefacts_dir}"
+            )
 
     with gr.Column(variant="panel"):
         with gr.Row():
             with gr.Column(scale=1):
                 file_explorer = gr.FileExplorer(
-                    root_dir=ROOT_FOLDER, ignore_glob="*.json", label="Library Explorer"
+                    root_dir=settings.local_artefacts_dir,
+                    ignore_glob="*.json",
+                    label="Library Explorer",
                 )
 
             with gr.Column(scale=3):
@@ -87,7 +87,6 @@ with gr.Blocks() as ui_demo_tab_assetlibrary:
 
 
 with gr.Blocks() as ui_demo_tab_assetcreation:
-
     # The state of selected segment. This is used when clicking the asset creation btn.
     selected_visual_segment = gr.State()
 
@@ -255,7 +254,6 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
         ],
     )
 
-    # When click save images...
     approve_button.click(
         move_images_to_library,
         inputs=[
