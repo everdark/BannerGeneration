@@ -14,10 +14,10 @@ from model import SegmentProfile
 from utils.firestore import (
     add_or_update_bannertemplate,
     add_or_update_visual_segment,
+    fetch_visual_segment_names,
     get_bannertemplate_config_by_name,
     get_template_configuration,
     get_visual_segment_config_by_name,
-    fetch_visual_segment_names,
 )
 from utils.io import find_files_with_prefix
 

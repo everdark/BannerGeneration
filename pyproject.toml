@@ -29,3 +29,14 @@ ruff = "^0.9.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff.lint.isort]
+known-first-party = [
+    "blocks",
+    "callbacks",
+    "config",
+    "constants",
+    "database",
+    "model",
+    "utils",
+]

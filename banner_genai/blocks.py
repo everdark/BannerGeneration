@@ -6,21 +6,20 @@ import gradio as gr
 from gradio_image_annotation import image_annotator
 
 import constants as C
-from config import settings
 from callbacks import (
     create_bounding_box_annotator,
     create_new_segment,
     generate_banner,
-    update_segment_config,
     save_template_configuration,
+    update_segment_config,
 )
+from config import settings
 from database import db
 from utils.firestore import (
-    get_bannertemplate_list,
     fetch_visual_segment_names,
+    get_bannertemplate_list,
 )
 from utils.gradio import (
-    display_image,
     display_image,
     generate_assets,
     move_images_to_library,
@@ -28,7 +27,6 @@ from utils.gradio import (
     select_folder,
 )
 from utils.io import create_file_map
-
 
 gallery_dirname_list = []  # FIXME: Use session state instead.
 

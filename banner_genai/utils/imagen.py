@@ -18,9 +18,9 @@ import base64
 import io
 from typing import Literal
 
-from rembg import remove, new_session
 import numpy as np
 from PIL import Image
+from rembg import new_session, remove
 from vertexai.generative_models import (
     Content,
     GenerativeModel,

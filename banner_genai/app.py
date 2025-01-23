@@ -1,19 +1,20 @@
+"""Entrypoint of the Gradio app."""
+
 import gradio as gr
 
 import constants as C
 from blocks import (
     ui_about_tab,
-    ui_demo_tab_assetlibrary,
-    ui_demo_tab_assetcreation,
-    ui_demo_tab_assetpreprocess,
     ui_demo_bannertemplateconfig_tab,
+    ui_demo_tab_assetcreation,
+    ui_demo_tab_assetlibrary,
+    ui_demo_tab_assetpreprocess,
     ui_demo_tab_bannergen,
 )
 from config import settings
 from utils.firestore import cleanup_document_store, init_document_store
 
 if settings.is_init_backend:
-    # This will re-create the initial documents saved in Firestore.
     cleanup_document_store()
     init_document_store()
 

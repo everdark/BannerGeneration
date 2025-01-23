@@ -12,13 +12,13 @@ import numpy as np
 from PIL import Image
 
 from config import settings
+from model import SegmentProfile
 from utils.imagen import (
-    invoke_gemini_for_text,
     generate_imagen_outputs,
+    invoke_gemini_for_text,
     remove_background,
 )
 from utils.io import get_filepath_in_folder_nested
-from model import SegmentProfile
 
 # TODO: Move event methods to callbacks.py module for better clarity.
 
