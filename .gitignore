@@ -6,6 +6,6 @@ __pycache__
 artefacts/*
 !artefacts/Background/
 !artefacts/Background_Processed/
-!artefacts/Graphic/
+!artefacts/Graphics/
 !artefacts/Logo/
 !artefacts/config.json
