@@ -9,3 +9,4 @@ artefacts/*
 !artefacts/Graphics/
 !artefacts/Logo/
 !artefacts/config.json
+*.onnx

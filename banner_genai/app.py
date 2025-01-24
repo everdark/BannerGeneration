@@ -27,6 +27,8 @@ if settings.is_init_backend:
     cleanup_document_store()
     init_document_store()
 
+os.environ["U2NET_HOME"] = settings.u2net_home
+
 tabs = [
     (ui_about_tab, C.BlockName.ABOUT),
     (ui_demo_tab_assetlibrary, C.BlockName.IMAGE),

@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     text_model: str = "gemini-1.5-flash-001"
     firestore_id: str = "(default)"
 
+    # This model is used for background removal.
+    u2net_home: str = "./u2net"
+
     local_artefacts_dir: str = "./artefacts"
     local_tmp_dir: str = "/tmp"
     local_actor_dirname: str = "Actors"
