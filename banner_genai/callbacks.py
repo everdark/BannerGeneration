@@ -790,8 +790,8 @@ def generate_banner(
     )
     LOCAL_INPUT_DIR_BG = os.path.join(settings.local_artefacts_dir, "Background")
     LOCAL_OUTPUT_DIR_BANNER = os.path.join(
-        settings.local_artefacts_dir, "Banner_Generated"
-    )  # FIXME: the dir needs to exist
+        settings.local_artefacts_dir, settings.local_banner_dirname
+    )
 
     print(f"""
         {visual_segment_dropdown},

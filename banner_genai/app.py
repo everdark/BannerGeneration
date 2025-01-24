@@ -19,6 +19,7 @@ from utils.io import makedir_if_not_exist
 for d in [
     os.path.join(settings.local_artefacts_dir, settings.local_actor_dirname),
     os.path.join(settings.local_artefacts_dir, settings.local_actor_processed_dirname),
+    os.path.join(settings.local_artefacts_dir, settings.local_banner_dirname),
 ]:
     makedir_if_not_exist(d)
 

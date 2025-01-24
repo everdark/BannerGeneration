@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     local_tmp_dir: str = "/tmp"
     local_actor_dirname: str = "Actors"
     local_actor_processed_dirname: str = "Actors_Processed"
+    local_banner_dirname: str = "Banner_Generated"
 
     n_image_generated: int = 3
 
