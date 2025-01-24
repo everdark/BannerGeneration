@@ -15,15 +15,6 @@ make sure to setup your [ADC](https://cloud.google.com/docs/authentication/provi
 
 [Poetry](https://github.com/python-poetry/poetry) is used to manage dependencies.
 
-If your autenthication to the private Python repositories failed,
-run:
-
-```bash
-make auth
-```
-
-to refresh your token.
-
 ## Style
 
 We follow the Black style using [Ruff](https://github.com/astral-sh/ruff).
