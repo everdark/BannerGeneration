@@ -3,6 +3,9 @@ __pycache__
 .ipynb_checkpoints
 .python-version
 .env
-artefacts/
-!artefacts/Background_Processed
+artefacts/*
+!artefacts/Background/
+!artefacts/Background_Processed/
+!artefacts/Graphic/
+!artefacts/Logo/
 !artefacts/config.json
