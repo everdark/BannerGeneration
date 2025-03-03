@@ -7,10 +7,13 @@ class Settings(BaseSettings):
     """Global settings overridable by .env file and environment variables."""
 
     gcp_project: str = "genai-mckinsey-dev-fg78"
-    # NOTE: The fast model sometimes does not generate quality "eyes" for person
-    image_model: str = "imagen-3.0-fast-generate-001"
-    text_model: str = "gemini-1.5-flash-001"
     firestore_id: str = "(default)"
+
+    # https://ai.google.dev/gemini-api/docs/imagen
+    image_model: str = "imagen-3.0-generate-001"
+
+    # https://ai.google.dev/gemini-api/docs/models/gemini
+    text_model: str = "gemini-2.0-flash-lite-001"
 
     # This model is used for background removal.
     u2net_home: str = "./u2net"

@@ -36,4 +36,16 @@ class SegmentProfile(BaseModel):
         return prompt
 
 
+class Offer(BaseModel):
+    """Data model for package offer."""
+
+    data: str
+    price: str
+    time: str
+
+    def text(self) -> str:
+        lines = [f"{k}: {v}" for k, v in dict(self).items()]
+        return "\n".join(lines)
+
+
 # TODO: Data models for template documents.

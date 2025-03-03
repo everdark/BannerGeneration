@@ -73,7 +73,6 @@ def invoke_gemini_multimodal_model_with_files(
 
 def rewrite_prompt(segment_profile: SegmentProfile) -> str:
     prompt_user_input = segment_profile.prompt()
-    print(f"User Input : {prompt_user_input}")
 
     # TODO: Move this out.
     rewrite_prompt = f"""
