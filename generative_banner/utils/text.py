@@ -7,8 +7,8 @@ from vertexai.generative_models import (
     GenerativeModel,
 )
 
-from config import settings
-from model import Offer
+from generative_banner.config import settings
+from generative_banner.model import Offer
 
 system_instructions = {
     "sms": "You are a Telco marketing expert that specializes in creating short, sincere, and concise marketing message in SMS format.",

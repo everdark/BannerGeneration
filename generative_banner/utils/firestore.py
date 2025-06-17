@@ -5,8 +5,8 @@ import os
 
 from google.cloud import firestore
 
-import constants as C
-from config import settings
+import generative_banner.constants as C
+from generative_banner.config import settings
 
 
 def init_document_store(config_file_path: str | None = None) -> None:

@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel
 
-from config import settings
+from generative_banner.config import settings
 
 
 class SegmentProfile(BaseModel):

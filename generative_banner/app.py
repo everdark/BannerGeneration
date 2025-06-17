@@ -4,17 +4,20 @@ import os
 
 import gradio as gr
 
-import constants as C
-from blocks import (
+import generative_banner.constants as C
+from generative_banner.blocks import (
     ui_about_tab,
     ui_demo_bannertemplateconfig_tab,
     ui_demo_tab_assetcreation,
     ui_demo_tab_assetlibrary,
     ui_demo_tab_bannergen,
 )
-from config import settings
-from utils.firestore import cleanup_document_store, init_document_store
-from utils.io import makedir_if_not_exist
+from generative_banner.config import settings
+from generative_banner.utils.firestore import (
+    cleanup_document_store,
+    init_document_store,
+)
+from generative_banner.utils.io import makedir_if_not_exist
 
 for d in [
     os.path.join(settings.local_artefacts_dir, settings.local_actor_dirname),

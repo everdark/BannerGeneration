@@ -20,16 +20,17 @@ class ImageModel(str, Enum):
 
     IMAGEN_3_FAST = "imagen-3.0-fast-generate-001"
     IMAGEN_3 = "imagen-3.0-generate-001"
+    IMAGEN_4_PREVIEW = "imagen-4.0-generate-preview-06-06"
 
 
 class BlockName(str, Enum):
     """Gradio block (tab) name."""
 
     ABOUT = "About"
-    IMAGE = "Demo Asset Library"
-    CREATE = "Demo Asset Creation"
-    TEMPLATE = "Demo Banner Template"
-    BANNER = "Demo Banner Generation"
+    IMAGE = "Asset Library"
+    CREATE = "Asset Creation"
+    TEMPLATE = "Banner Template"
+    BANNER = "Banner Generation"
 
 
 class DocKey(str, Enum):

@@ -5,8 +5,8 @@ import os
 import gradio as gr
 from gradio_image_annotation import image_annotator
 
-import constants as C
-from callbacks import (
+import generative_banner.constants as C
+from generative_banner.callbacks import (
     create_bounding_box_annotator,
     create_new_segment,
     display_image,
@@ -18,36 +18,36 @@ from callbacks import (
     select_folder,
     update_segment_config,
 )
-from config import settings
-from database import db
-from utils.firestore import (
+from generative_banner.config import settings
+from generative_banner.database import db
+from generative_banner.utils.firestore import (
     fetch_visual_segment_names,
     get_bannertemplate_list,
 )
-from utils.io import create_file_map
+from generative_banner.utils.io import create_file_map
 
 gallery_dirname_list = []  # FIXME: Use session state instead.
 
 
 with gr.Blocks() as ui_about_tab:
-    gr.Markdown("""
-    ### About this Demo
-    This demo demonstrates an end to end pipeline for dynamic banner generation for CVM targeting using Imagen3, Gemini and opensource Python libraries like `rembg` (which leverages DNN models for object detection).
+    gr.Markdown(f"""
+    ### About This App
+    The app demonstrates an end-to-end workflow for dynamic banner generation as marketing assets using a combination of Google's Generative AI models and open-source DNN models.
 
     ### Instructions
-    Step 1 - Use the "Demo Asset Library" tab to navigate visual assets and perform background-removal
+    Step 1 - Use the "{C.BlockName.IMAGE}" tab to navigate existing visual assets and optionally perform background-removal
     \n
-    Step 2 - Use the "Demo Asset Creation" tab to demonstrate the creation of a new visual segments using text-to-image model
+    Step 2 - Use the "{C.BlockName.CREATE}" tab to create new visuals
     \n
-    Step 3 - Use the "Demo Banner Template" tab to illustrate the concept of banner templates and how this can be defined via a UX or even via tools like Figma
+    Step 3 - Use the "{C.BlockName.TEMPLATE}" tab to illustrate the concept of banner templates and how this can be defined via a UX or even via tools like Figma
     \n
-    Step 4 - Use the "Demo Banner Generation" tab to illustrate the concept of dynamic banner generation for one or more templates for one or more visual segments
+    Step 4 - Use the "{C.BlockName.BANNER}" tab to illustrate the concept of dynamic banner generation for one or more templates for one or more visual segments
     """)
 
 
 with gr.Blocks() as ui_demo_tab_assetlibrary:
     with gr.Column(variant="panel"):
-        gr.Markdown("# Marketing Assets Library")
+        gr.Markdown("# Visual Asset Library")
 
     with gr.Column(variant="panel"):
         with gr.Row():
@@ -74,9 +74,7 @@ with gr.Blocks() as ui_demo_tab_assetlibrary:
             displayed_image = gr.Image(label="Selected Image")
 
     with gr.Column(variant="panel"):
-        preprocess_assets_button = gr.Button(
-            "Click to Preprocess Newly Created Visual Assets"
-        )
+        preprocess_assets_button = gr.Button("Preprocess newly created visuals")
 
     # Event handler for folder selection
     file_explorer.change(
@@ -100,7 +98,7 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
     selected_visual_segment = gr.State()
 
     with gr.Row(variant="panel"):
-        gr.Markdown("# Create New Marketing Assets With Imagen3")
+        gr.Markdown("# Create new visuals using text-to-image model")
 
     with gr.Row():
         with gr.Column(variant="panel"):
@@ -168,9 +166,7 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
             )
 
     with gr.Row(visible=False) as generate_visual_assets:
-        generate_assets_button = gr.Button(
-            "Click to use Imagen3 to Generate Visual Assets"
-        )
+        generate_assets_button = gr.Button("Generate visuals")
 
     with gr.Row(visible=False) as review_visual_assets:
         with gr.Row(variant="panel"):
@@ -180,7 +176,7 @@ with gr.Blocks() as ui_demo_tab_assetcreation:
 
     with gr.Row(visible=False) as approve_visual_assets:
         with gr.Column(variant="panel"):
-            approve_button = gr.Button("Save Images to Marketing Library")
+            approve_button = gr.Button("Save images to library")
 
     gr.on(
         triggers=[load_segment_config_button.click, visual_segment_dropdown.change],
@@ -354,7 +350,7 @@ with gr.Blocks() as ui_demo_tab_bannergen:
 
     with gr.Column(variant="panel"):
         preprocess_visualsegments_button = gr.Button(
-            "Click to update Newly Added Visual Segments"
+            "Update Newly Added Visual Segments"
         )
 
     with gr.Row():
@@ -434,9 +430,7 @@ with gr.Blocks() as ui_demo_tab_bannergen:
                 )
 
     with gr.Row(visible=False) as generate_banner_assets:
-        generate_bannerassets_button = gr.Button(
-            "Click to Generate Banners for Campaign"
-        )
+        generate_bannerassets_button = gr.Button("Generate banners")
 
     with gr.Row(visible=False) as review_banner_assets:
         with gr.Row(variant="panel"):

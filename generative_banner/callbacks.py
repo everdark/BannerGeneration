@@ -12,11 +12,11 @@ import numpy as np
 from gradio_image_annotation import image_annotator
 from PIL import Image, ImageDraw, ImageFont
 
-import constants as C
-from config import settings
-from database import db
-from model import SegmentProfile
-from utils.firestore import (
+import generative_banner.constants as C
+from generative_banner.config import settings
+from generative_banner.database import db
+from generative_banner.model import SegmentProfile
+from generative_banner.utils.firestore import (
     add_or_update_bannertemplate,
     add_or_update_visual_segment,
     fetch_visual_segment_names,
@@ -24,12 +24,12 @@ from utils.firestore import (
     get_template_configuration,
     get_visual_segment_config_by_name,
 )
-from utils.imagen import (
+from generative_banner.utils.imagen import (
     generate_imagen_outputs,
     remove_background,
     rewrite_prompt,
 )
-from utils.io import (
+from generative_banner.utils.io import (
     find_files_with_prefix,
     get_filepath_in_folder_nested,
 )
@@ -230,9 +230,7 @@ def generate_assets(
 
     yield (
         processed_images,
-        gr.update(
-            value="Click to use Imagen3 to Generate Visual Assets", interactive=True
-        ),
+        gr.update(value="Generate visuals", interactive=True),
         gr.Markdown(imagen_prompt),
     )
 
@@ -906,5 +904,5 @@ def generate_banner(
 
     yield (
         generated_banner_images,
-        gr.update(value="Click to Generate Banners for Campaign", interactive=True),
+        gr.update(value="Generate banners", interactive=True),
     )  # Reset the button

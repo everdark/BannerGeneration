@@ -6,12 +6,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Global settings overridable by .env file and environment variables."""
 
-    gcp_project: str = "genai-mckinsey-dev-fg78"
+    gcp_project: str = ""
     firestore_id: str = "(default)"
 
-    # https://ai.google.dev/gemini-api/docs/imagen
-    image_model: str = "imagen-3.0-generate-001"
-
+    # This model is used for prompt rewriting.
     # https://ai.google.dev/gemini-api/docs/models/gemini
     text_model: str = "gemini-2.0-flash-lite-001"
 

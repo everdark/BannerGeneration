@@ -27,19 +27,16 @@ from vertexai.generative_models import (
 )
 from vertexai.vision_models import GeneratedImage, ImageGenerationModel
 
-from config import settings
-from model import SegmentProfile
+from generative_banner.config import settings
+from generative_banner.model import SegmentProfile
 
 
 def generate_imagen_outputs(
     prompt: str,
     number_of_images: int = 1,
     aspect_ratio: Literal["1:1", "9:16", "16:9", "4:3", "3:4"] = "1:1",
-    model: str | None = None,
+    model: str = "imagen-3.0-generate-001",  # https://ai.google.dev/gemini-api/docs/imagen
 ) -> list[GeneratedImage]:
-    if model is None:
-        model = settings.image_model
-
     generation_model = ImageGenerationModel.from_pretrained(model)
     image_list = generation_model.generate_images(
         prompt=prompt,
