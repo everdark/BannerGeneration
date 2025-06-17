@@ -2,7 +2,7 @@
 
 ---
 - [Pre-requisites](#pre-requisites)
-- [Mnage dependencies](#mnage-dependencies)
+- [Manage dependencies](#manage-dependencies)
 - [Style](#style)
 - [Development](#development)
   - [Add a new model](#add-a-new-model)
@@ -13,7 +13,7 @@
 For functionality interacting with Google Cloud resources,
 make sure to setup your [ADC](https://cloud.google.com/docs/authentication/provide-credentials-adc) if you are working with a local machine.
 
-## Mnage dependencies
+## Manage dependencies
 
 [Poetry 2](https://github.com/python-poetry/poetry) is used to manage dependencies.
 
